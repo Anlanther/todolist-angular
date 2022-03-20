@@ -1,0 +1,37 @@
+/* Add a black background color to the top navigation */
+.header-bar {
+    overflow: hidden;
+    padding: 10px 50px 10px;
+    margin: 0px;
+    outline: none;
+    border: 0px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    background-color: #1976d2;
+    color: white;
+    font-weight: 600;
+  }
+  
+  /* Style the links inside the navigation bar */
+  .header-bar a {
+    float: left;
+    color: #f2f2f2;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+    font-size: 17px;
+  }
+  
+  /* Change the color of links on hover */
+  .header-bar a:hover {
+    background-color: #ddd;
+    color: black;
+  }
+  
+  /* Add a color to the active/current link */
+  .header-bar a.active {
+    background-color: #04AA6D;
+    color: white;
+  }
