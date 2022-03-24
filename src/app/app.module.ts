@@ -11,6 +11,9 @@ import { HttpClientInMemoryWebApiModule } from 'angular-in-memory-web-api';
 import { TaskData } from './task/task-data';
 import { HttpClientModule } from '@angular/common/http';
 import { TaskModule } from './task/task.module';
+import { SignupComponent } from './user/signup/signup.component';
+import { LoginComponent } from './user/login/login.component';
+import { UserModule } from './user/user.module';
 
 @NgModule({
   declarations: [
@@ -25,12 +28,12 @@ import { TaskModule } from './task/task.module';
     FormsModule, // For 2 way binding. Will use for filtering
     AppRoutingModule,
     RouterModule.forRoot([
-      
       { path: 'home', component: HomeComponent },
       { path: '', redirectTo: 'home', pathMatch: 'full' },
       { path: '**', redirectTo: 'home', pathMatch: 'full' }
     ]),
-    TaskModule
+    TaskModule,
+    UserModule
   ],
   providers: [],
   bootstrap: [AppComponent]
