@@ -2,7 +2,7 @@ export interface ITask {
     taskId: number;
     taskName: string;
     description: string;
-    dueDate: Date;
+    dueDate: string;
     priorityLevel: number;
     isComplete: boolean;
 }

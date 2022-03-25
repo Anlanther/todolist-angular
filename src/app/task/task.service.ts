@@ -63,7 +63,7 @@ export class TaskService {
       taskId: 0,
       taskName: '',
       description: '',
-      dueDate: new Date(),
+      dueDate: '',
       priorityLevel: 0,
       isComplete: false
     };

@@ -8,7 +8,7 @@ export class TaskData implements InMemoryDbService {
                 taskId: 1,
                 taskName: 'Finish Report',
                 description: 'Biology report for class FIFS.',
-                dueDate: new Date(2022, 2, 10),
+                dueDate: new Date(2022, 2, 10).toISOString(),
                 priorityLevel: 5,
                 isComplete: false
             },
@@ -16,7 +16,7 @@ export class TaskData implements InMemoryDbService {
                 taskId: 2,
                 taskName: 'Create Website',
                 description: 'Practicing Angular.',
-                dueDate: new Date(2022, 2, 10),
+                dueDate: new Date(2022, 2, 10).toISOString(),
                 priorityLevel: 5,
                 isComplete: false
             }
