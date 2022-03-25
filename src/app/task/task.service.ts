@@ -1,6 +1,6 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { catchError, map, Observable, tap, throwError } from 'rxjs';
+import { catchError, map, Observable, of, tap, throwError } from 'rxjs';
 import { ITask } from './task';
 
 @Injectable({
@@ -19,8 +19,13 @@ export class TaskService {
   }
   
   getTask(id: number): Observable<ITask | undefined> {
-    return this.getAllTasks().pipe(
-      map((data: ITask[]) => data.find((task) => task.taskId == id))
+    if (id === 0) {
+      return of(this.initialiseTask());
+    }
+    const url = `${this.tasksUrl}/${id}`;
+    return this.http.get<ITask>(url).pipe(
+      tap((data) => console.log('getProduct: ' + JSON.stringify(data))),
+      catchError(this.handleError)
     );
   }
 
@@ -47,5 +52,20 @@ export class TaskService {
     }
     console.log(errorMessage);
     return throwError(errorMessage);
+  }
+
+  // createTask(task: ITask): Observable<ITask> {
+  //   const headers
+  // }
+
+  initialiseTask(): ITask {
+    return {
+      taskId: 0,
+      taskName: '',
+      description: '',
+      dueDate: new Date(),
+      priorityLevel: 0,
+      isComplete: false
+    };
   }
 }

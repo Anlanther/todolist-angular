@@ -4,7 +4,7 @@ import { AddTaskComponent } from './add-task/add-task.component';
 import { CompletedListComponent } from './completed-list/completed-list.component';
 import { TaskDetailComponent } from './task-detail/task-detail.component';
 import { TaskListComponent } from './task-list/task-list.component';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { TaskDetailGuard } from './task-detail/task-detail.guard';
 
@@ -18,7 +18,7 @@ import { TaskDetailGuard } from './task-detail/task-detail.guard';
   ],
   imports: [
     CommonModule, // this exports forms and router module for other modules
-    FormsModule,
+    ReactiveFormsModule,
     RouterModule.forChild([
       { path: 'tasks', component: TaskListComponent },
       { path: 'tasks/:id', canActivate: [TaskDetailGuard], component: TaskDetailComponent },

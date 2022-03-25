@@ -1,37 +1,74 @@
 <div class="container">
-    <div class="row">
-      <div class="col col-lg-7">
-        <div class="input-group mb-3">
-            <span class="input-group-text" id="inputGroup-sizing-default">Add task:</span>
-            <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
-          </div>
-      </div>
-      <div class="col">
-        <div class="dropdown">
-            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-              Due Date
-            </button>
-            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-              <li><a class="dropdown-item" href="#">Action</a></li>
-              <li><a class="dropdown-item" href="#">Another action</a></li>
-              <li><a class="dropdown-item" href="#">Something else here</a></li>
-            </ul>
-          </div>
-      </div>
-      <div class="col">
-        <div class="dropdown">
-            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-              Priority
-            </button>
-            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-              <li><a class="dropdown-item" href="#">Action</a></li>
-              <li><a class="dropdown-item" href="#">Another action</a></li>
-              <li><a class="dropdown-item" href="#">Something else here</a></li>
-            </ul>
-          </div>
-      </div>
-      <div class="col">
-        <button type="button" class="btn btn-primary">Submit</button>
+  <!-- Form Group -->
+  <form novalidate (ngSubmit)="saveTask()" [formGroup]="taskInputForm">
+    <!-- Add Task -->
+    <div class="col">
+      <div class="input-group mb-3">
+        <span class="input-group-text" id="inputGroup-sizing-default"
+          >Add task:</span
+        >
+        <input
+          type="text"
+          class="form-control"
+          aria-label="Sizing example input"
+          aria-describedby="inputGroup-sizing-default"
+          placeholder="Add a task here"
+          formControlName="taskName"
+          [ngClass]="{ 'is-invalid': inputErrorMessage }"
+        />
+        <span class="invalid-feedback">{{ inputErrorMessage }}</span>
       </div>
     </div>
+
+    <!-- 1/3 columns -->
+    <div class="row row-cols-auto">
+      <!-- Due Date -->
+      <div class="col">
+        <input
+          type="date"
+          class="form-control"
+          formControlName="dueDate"
+          [ngClass]="{ 'is-invalid': inputErrorMessage }"
+          min="{{ nowDate }}"
+          max="{{ maxDate }}"
+        />
+        <span class="invalid-feedback">{{ inputErrorMessage }}</span>
+      </div>
+
+      <!-- Priority -->
+      <div class="col">
+        <select
+          class="form-select"
+          aria-label="Default select example"
+          formControlName="priorityLevel"
+          [ngClass]="{ 'is-invalid': inputErrorMessage }"
+        >
+          <span class="invalid-feedback">{{ inputErrorMessage }}</span>
+          <option value="" disabled selected hidden>Priority Level</option>
+          <option value="1">1</option>
+          <option value="2">2</option>
+          <option value="3">3</option>
+          <option value="4">4</option>
+          <option value="5">5</option>
+        </select>
+      </div>
+
+      <!-- Submit -->
+      <div class="col">
+        <button
+          type="submit"
+          class="btn btn-primary"
+          [title]="
+            taskInputForm.valid
+              ? 'Save your entered data'
+              : 'Disabled until the form data is valid'
+          "
+          [disabled]="!taskInputForm.valid"
+        >
+          Submit
+        </button>
+      </div>
+    </div>
+  </form>
+  <br />
 </div>
