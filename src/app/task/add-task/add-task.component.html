@@ -14,9 +14,9 @@
           aria-describedby="inputGroup-sizing-default"
           placeholder="Add a task here"
           formControlName="taskName"
-          [ngClass]="{ 'is-invalid': inputErrorMessage }"
+          [ngClass]="{ 'is-invalid': inputErrorMessage.taskName}"
         />
-        <span class="invalid-feedback">{{ inputErrorMessage }}</span>
+        <span class="invalid-feedback">{{ inputErrorMessage.taskName }}</span>
       </div>
     </div>
 
@@ -28,11 +28,11 @@
           type="date"
           class="form-control"
           formControlName="dueDate"
-          [ngClass]="{ 'is-invalid': inputErrorMessage }"
+          [ngClass]="{ 'is-invalid': inputErrorMessage.dueDate}"
           min="{{ nowDate }}"
           max="{{ maxDate }}"
         />
-        <span class="invalid-feedback">{{ inputErrorMessage }}</span>
+        <span class="invalid-feedback">{{ inputErrorMessage.dueDate }}</span>
       </div>
 
       <!-- Priority -->
@@ -41,9 +41,9 @@
           class="form-select"
           aria-label="Default select example"
           formControlName="priorityLevel"
-          [ngClass]="{ 'is-invalid': inputErrorMessage }"
+          [ngClass]="{ 'is-invalid': inputErrorMessage.priority}"
         >
-          <span class="invalid-feedback">{{ inputErrorMessage }}</span>
+          <span class="invalid-feedback">{{ inputErrorMessage.priority }}</span>
           <option value="" disabled selected hidden>Priority Level</option>
           <option value="1">1</option>
           <option value="2">2</option>

@@ -24,7 +24,7 @@ export class AddTaskComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChildren(FormControlName, { read: ElementRef }) formInputElements!: ElementRef[];
 
   taskInputForm!: FormGroup;
-  inputErrorMessage: { [key: string]: string } = {};
+  inputErrorMessage: {taskName?: string, dueDate?: string, priority?: string} = {};
   task!: ITask;
   
   // Still need to figure this part out to see if it works
@@ -41,28 +41,28 @@ export class AddTaskComponent implements OnInit, AfterViewInit, OnDestroy {
   this._validationMessages = {
     taskName: {
       required: 'Task name is required.',
-      minlength: 'Task name must be longer than three characters.',
+      minlength: 'Task name must be longer than 3 characters.',
       maxlength: 'Task name cannot be longer than 50 characters.',
     },
     dueDate: {
-      required: 'Task name is required.',
-      minlength: 'Task name must be longer than three characters.',
-      maxlength: 'Task name cannot be longer than 50 characters.',
+      required: 'Due date is required.',
     },
     priority: {
-      required: 'Task name is required.',
+      required: 'Priority level is required.',
     }
   };
 
   this._genericValidator = new GenericValidator(this._validationMessages);
+
+  this.taskInputForm = this.fb.group({
+    taskName: ['', [Validators.required, Validators.minLength(3)]],
+    dueDate: ['', [Validators.required]],
+    priorityLevel: ['', [Validators.required]]
+  });
+
 }
 
   ngOnInit(): void {
-    this.taskInputForm = this.fb.group({
-      taskName: ['', [Validators.required, Validators.minLength(3), Validators]],
-      dueDate: ['', [Validators.required]],
-      priorityLevel: ['', [Validators.required]]
-    });
 
   }
 
