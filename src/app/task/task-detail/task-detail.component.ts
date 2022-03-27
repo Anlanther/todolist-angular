@@ -76,7 +76,7 @@ export class TaskDetailComponent implements OnInit, AfterViewInit, OnDestroy {
       dueDate: ['', Validators.required],
       priorityLevel: ['', Validators.required],
       isComplete: ['', Validators.required],
-      taskDescription: '',
+      description: '',
     });
   }
 
@@ -125,7 +125,7 @@ export class TaskDetailComponent implements OnInit, AfterViewInit, OnDestroy {
       dueDate: this.task.dueDate,
       priorityLevel: this.task.priorityLevel,
       isComplete: this.task.isComplete,
-      taskDescription: this.task.description,
+      description: this.task.description,
     });
   }
 
