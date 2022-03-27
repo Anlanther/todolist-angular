@@ -27,7 +27,7 @@
       <tbody>
         <tr *ngFor="let task of filteredTasks">
           <td>
-            <a [routerLink]="['/tasks', task.taskId]">
+            <a [routerLink]="['/tasks', task.id]">
               {{task.taskName}}
             </a>
           </td>

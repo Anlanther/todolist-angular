@@ -29,13 +29,11 @@
           class="form-control"
           formControlName="dueDate"
           [ngClass]="{ 'is-invalid': inputErrorMessage.dueDate}"
-          min="{{ nowDate }}"
-          max="{{ maxDate }}"
         />
         <span class="invalid-feedback">{{ inputErrorMessage.dueDate }}</span>
       </div>
 
-      <!-- Priority -->
+      <!-- Priority Level-->
       <div class="col">
         <select
           class="form-select"
