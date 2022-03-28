@@ -94,4 +94,14 @@ export class TaskService {
       catchError(this.handleError)
     );
   }
+
+  deleteTask(id: number): Observable<{}> {
+    const headers = new HttpHeaders({ 'Content-Type': 'application/json'});
+    const url = `${this.tasksUrl}/${id}`;
+
+    return this.http.delete<ITask>(url, {headers}).pipe(
+      tap((data) => console.log('deleteTask: ' + id)),
+      catchError(this.handleError)
+    );
+  }
 }

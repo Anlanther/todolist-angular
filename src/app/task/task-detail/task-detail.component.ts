@@ -144,6 +144,17 @@ export class TaskDetailComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
+  deleteTask(): void {
+    if (this.task.id) {
+      if (confirm(`Really delete the task: ${this.task.taskName}`)) {
+        this.taskService.deleteTask(this.task.id).subscribe({
+          next: () => this.onSaveComplete(),
+          error: (err) => this.errorMessage = err
+        })
+      }
+    }
+  }
+
   onSaveComplete() {
     this.taskEditForm.reset();
     this.router.navigate(['/tasks']);
