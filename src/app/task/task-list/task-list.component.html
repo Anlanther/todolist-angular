@@ -4,18 +4,28 @@
 
     <app-add-task></app-add-task>
 
+    <!-- Priority Filter -->
     <div class="container">
-      <div class="row">
-        <div class="col-2">Priority Filter:</div>
-        <div class="col-4">
-          <input type="text" class="form-control">
-        </div>
-      </div>
+      <div class="row row-cols-auto">
+        <div class="col"><h4>Filter: </h4></div>
+        <div class="col">
+          <select
+          class="form-select"
+          aria-label="Default select example"
+          (change)="onSelected($any($event.target).value)"
+        >
+          <option value="" selected>– Priority Filter –</option>
+          <option value="1">1</option>
+          <option value="2">2</option>
+          <option value="3">3</option>
+          <option value="4">4</option>
+          <option value="5">5</option>
+        </select>
+        </div>      
     </div>
 
-    <h4 *ngIf="listFilter">Priority {{listFilter}}</h4>
-
-    <table class="table" *ngIf="tasks.length">
+    <!-- Task Table -->
+    <table class="table" *ngIf="tasks$ | async as tasks">
       <thead>
         <tr>
           <th scope="col">Task</th>
@@ -25,7 +35,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let task of filteredTasks">
+        <tr *ngFor="let task of tasks">
           <td>
             <a [routerLink]="['/tasks', task.id]">
               {{task.taskName}}

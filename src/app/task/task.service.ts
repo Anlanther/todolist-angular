@@ -13,14 +13,13 @@ import { ITask } from './task';
 export class TaskService {
   private tasksUrl = 'api/tasks';
 
-  constructor(private http: HttpClient) {}
+  tasks$ = this.http.get<ITask[]>(this.tasksUrl).pipe(
+    tap((data) => console.log('All', JSON.stringify(data))),
+    catchError(this.handleError)
+  );
 
-  getAllTasks(): Observable<ITask[]> {
-    return this.http.get<ITask[]>(this.tasksUrl).pipe(
-      tap((data) => console.log('All', JSON.stringify(data))),
-      catchError(this.handleError)
-    );
-  }
+
+  constructor(private http: HttpClient) {}
 
   getTask(id: number): Observable<ITask> {
     // Creating a new task
@@ -99,6 +98,7 @@ export class TaskService {
     const headers = new HttpHeaders({ 'Content-Type': 'application/json'});
     const url = `${this.tasksUrl}/${id}`;
 
+    // the data is mapped to the shape of the interface
     return this.http.delete<ITask>(url, {headers}).pipe(
       tap((data) => console.log('deleteTask: ' + id)),
       catchError(this.handleError)
