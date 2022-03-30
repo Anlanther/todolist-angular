@@ -1,7 +1,9 @@
 export interface ITask {
-    taskId: number;
+    // need to allow it to be null for the web api to assign a number to it
+    id: number | null;
+    taskName: string;
     description: string;
-    dueDate: Date;
+    dueDate: string;
     priorityLevel: number;
     isComplete: boolean;
 }

@@ -1,0 +1,121 @@
+<div class="card w-75">
+  <div class="card-body">
+    <h3>Task Information</h3>
+
+    <div class="container">
+      <form novalidate (ngSubmit)="saveTask()" [formGroup]="taskEditForm">
+        <!-- Task Name -->
+        <div class="row">
+          <div class="col-8">
+            <div class="input-group mb-3">
+              <span class="input-group-text" id="inputGroup-sizing-default"
+                >Task Name:</span
+              >
+              <input
+                type="text"
+                class="form-control"
+                aria-label="Sizing example input"
+                aria-describedby="inputGroup-sizing-default"
+                placeholder="{{ task?.taskName }}"
+                formControlName="taskName"
+                [ngClass]="{ 'is-invalid': inputErrorMessage.taskName }"
+              />
+              <span class="invalid-feedback">{{
+                inputErrorMessage.taskName
+              }}</span>
+            </div>
+          </div>
+
+          <!-- Due Date -->
+          <div class="col-4">
+            <input
+              type="date"
+              class="form-control"
+              formControlName="dueDate"
+              [ngClass]="{ 'is-invalid': inputErrorMessage.dueDate }"
+            />
+            <span class="invalid-feedback">{{
+              inputErrorMessage.dueDate
+            }}</span>
+          </div>
+        </div>
+
+        <!-- Priority Level -->
+        <div class="row">
+          <div class="col-4">
+            <select
+              class="form-select"
+              aria-label="Default select example"
+              formControlName="priorityLevel"
+              [ngClass]="{ 'is-invalid': inputErrorMessage.priority }"
+            >
+              <span class="invalid-feedback">{{
+                inputErrorMessage.priority
+              }}</span>
+              <option value="" disabled selected hidden>Priority Level</option>
+              <option value="1">1</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+              <option value="4">4</option>
+              <option value="5">5</option>
+            </select>
+          </div>
+
+          <!-- Status -->
+          <div class="col-4">
+            <select
+              class="form-select"
+              aria-label="Default select example"
+              formControlName="isComplete"
+            >
+              <option value="" disabled selected hidden>
+                Completed Status
+              </option>
+              <option value="false">Incomplete</option>
+              <option value="true">Complete</option>
+            </select>
+          </div>
+
+          <!-- Task Description -->
+          <div class="mb-3">
+            <label for="descriptionText" class="form-label"
+              >Task Description</label
+            >
+            <textarea
+              class="form-control"
+              id="descriptionText"
+              rows="3"
+              placeholder="Add a description here (optional)."
+              formControlName="description"
+            ></textarea>
+          </div>
+
+          <!-- Buttons -->
+          <div class="container">
+            <div class="row row-cols-auto">
+              <!-- Back Button -->
+              <div class="col">
+                <button type="button" class="btn btn-light" (click)="onBack()">
+                  Back
+                </button>
+              </div>
+              <!-- Save Button -->
+              <div class="col">
+                <button type="submit" class="btn btn-primary">Save</button>
+              </div>
+              <div class="col">
+                <button
+                  type="button"
+                  class="btn btn-outline-danger"
+                  (click)="deleteTask()"
+                >
+                  Delete
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

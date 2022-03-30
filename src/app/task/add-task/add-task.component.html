@@ -1,0 +1,72 @@
+<div class="container">
+  <!-- Form Group -->
+  <form novalidate (ngSubmit)="saveTask()" [formGroup]="taskInputForm">
+    <!-- Add Task -->
+    <div class="col">
+      <div class="input-group mb-3">
+        <span class="input-group-text" id="inputGroup-sizing-default"
+          >Add task:</span
+        >
+        <input
+          type="text"
+          class="form-control"
+          aria-label="Sizing example input"
+          aria-describedby="inputGroup-sizing-default"
+          placeholder="Add a task here"
+          formControlName="taskName"
+          [ngClass]="{ 'is-invalid': inputErrorMessage.taskName}"
+        />
+        <span class="invalid-feedback">{{ inputErrorMessage.taskName }}</span>
+      </div>
+    </div>
+
+    <!-- 1/3 columns -->
+    <div class="row row-cols-auto">
+      <!-- Due Date -->
+      <div class="col">
+        <input
+          type="date"
+          class="form-control"
+          formControlName="dueDate"
+          [ngClass]="{ 'is-invalid': inputErrorMessage.dueDate}"
+        />
+        <span class="invalid-feedback">{{ inputErrorMessage.dueDate }}</span>
+      </div>
+
+      <!-- Priority Level-->
+      <div class="col">
+        <select
+          class="form-select"
+          aria-label="Default select example"
+          formControlName="priorityLevel"
+          [ngClass]="{ 'is-invalid': inputErrorMessage.priority}"
+        >
+          <span class="invalid-feedback">{{ inputErrorMessage.priority }}</span>
+          <option value="" disabled selected >Priority Level</option>
+          <option value="1">1</option>
+          <option value="2">2</option>
+          <option value="3">3</option>
+          <option value="4">4</option>
+          <option value="5">5</option>
+        </select>
+      </div>
+
+      <!-- Submit -->
+      <div class="col">
+        <button
+          type="submit"
+          class="btn btn-primary"
+          [title]="
+            taskInputForm.valid
+              ? 'Save your entered data'
+              : 'Disabled until the form data is valid'
+          "
+          [disabled]="!taskInputForm.valid"
+        >
+          Submit
+        </button>
+      </div>
+    </div>
+  </form>
+  <br />
+</div>
