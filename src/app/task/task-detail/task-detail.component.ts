@@ -15,7 +15,7 @@ import {
 import { ActivatedRoute, Router } from '@angular/router';
 import { debounceTime, fromEvent, merge, Observable, Subscription } from 'rxjs';
 import { GenericValidator } from '../add-task/generic-validator';
-import { ITask } from '../task';
+import { ITask, ITaskResolved } from '../task';
 import { TaskService } from '../task.service';
 
 @Component({
@@ -86,6 +86,10 @@ export class TaskDetailComponent implements OnInit, AfterViewInit, OnDestroy {
       const id = Number(this.route.snapshot.paramMap.get('id'));
       this.getTask(id);
     });
+
+    // TODO: Figure this thing out
+    // const resolvedData: ITaskResolved = this.route.snapshot.data['resolvedData'];
+    // this.errorMessage = resolvedData.error;
   }
 
   ngAfterViewInit(): void {
@@ -155,9 +159,14 @@ export class TaskDetailComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
+  // TODO: Add a subject stream here
   onSaveComplete() {
     this.taskEditForm.reset();
-    this.router.navigate(['/tasks']);
+    if (this.task.isComplete) {
+      this.router.navigate(['/tasks']);
+    } else {
+      this.router.navigate(['/completed']);
+    }
   }
 
   ngOnDestroy(): void {

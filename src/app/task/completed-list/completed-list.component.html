@@ -1,24 +1,60 @@
 <div class="card w-75">
-    <div class="card-body">
-        <h3>Completed List:</h3>
-      <table class="table">
-        <thead>
-          <tr>
-            <th scope="col">#</th>
-            <th scope="col">First</th>
-            <th scope="col">Last</th>
-            <th scope="col">Handle</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <th scope="row">1</th>
-            <td>Mark</td>
-            <td>Otto</td>
-            <td>@mdo</td>
-          </tr>
-        </tbody>
-      </table>
+  <div class="card-body">
+    <h3>Completed List:</h3>
+
+    <!-- Priority Filter -->
+    <div class="container">
+      <div class="row row-cols-auto">
+        <div class="col"><h4>Filter: </h4></div>
+        <div class="col">
+          <select
+          class="form-select"
+          aria-label="Default select example"
+          (change)="onFilterSelected($any($event.target).value)"
+        >
+          <option value="" selected>– Priority Filter –</option>
+          <option value="1">1</option>
+          <option value="2">2</option>
+          <option value="3">3</option>
+          <option value="4">4</option>
+          <option value="5">5</option>
+        </select>
+        </div>      
     </div>
+
+    <!-- Task Table -->
+    <table class="table" *ngIf="completedTasks$ | async as tasks">
+      <thead>
+        <tr>
+          <th scope="col">Task</th>
+          <th scope="col">Due Date</th>
+          <th scope="col">Priority</th>
+          <th scope="col">Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let task of tasks">
+          <td>
+            <a [routerLink]="['/tasks', task.id]">
+              {{task.taskName}}
+            </a>
+          </td>
+          <td>{{task.dueDate}}</td>
+          <td>{{task.priorityLevel}}</td>
+          
+          <!-- Completed status TODO: FIGURE THIS OUT-->
+          <td>
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" (change)="checkChange()" >
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
   </div>
-  
+</div>
+
+<div class="alert alert-danger"
+     *ngIf="errorMessageAction$ | async as errorMessage">
+  {{errorMessage}}
+</div>
