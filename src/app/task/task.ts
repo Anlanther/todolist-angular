@@ -7,3 +7,9 @@ export interface ITask {
     priorityLevel: number;
     isComplete: boolean;
 }
+
+// Good for error handling when using resolver
+export interface ITaskResolved {
+    task: ITask | null;
+    error?: any;
+}

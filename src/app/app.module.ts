@@ -14,6 +14,7 @@ import { TaskModule } from './task/task.module';
 import { SignupComponent } from './user/signup/signup.component';
 import { LoginComponent } from './user/login/login.component';
 import { UserModule } from './user/user.module';
+import { StoreModule } from '@ngrx/store';
 
 @NgModule({
   declarations: [
@@ -26,14 +27,10 @@ import { UserModule } from './user/user.module';
     HttpClientModule,
     HttpClientInMemoryWebApiModule.forRoot(TaskData, { delay: 1000 }), // creating a delay to mimic db behaviour
     FormsModule, // For 2 way binding. Will use for filtering
-    AppRoutingModule,
-    RouterModule.forRoot([
-      { path: 'home', component: HomeComponent },
-      { path: '', redirectTo: 'home', pathMatch: 'full' },
-      { path: '**', redirectTo: 'home', pathMatch: 'full' }
-    ]),
     TaskModule,
-    UserModule
+    UserModule,
+    AppRoutingModule,
+    StoreModule.forRoot({}, {})
   ],
   providers: [],
   bootstrap: [AppComponent]
