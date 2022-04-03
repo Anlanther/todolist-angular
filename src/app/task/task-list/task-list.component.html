@@ -36,24 +36,26 @@
         </thead>
         <tbody>
           <tr *ngFor="let task of tasks">
-            <td>
-              <a [routerLink]="['/tasks', task.id]">
-                {{ task.taskName }}
-              </a>
-            </td>
-            <td>{{ task.dueDate }}</td>
-            <td>{{ task.priorityLevel }}</td>
+            <ng-container *ngIf="displayTask$ | async">
+              <td>
+                <a [routerLink]="['/tasks', task.id]">
+                  {{ task.taskName }}
+                </a>
+              </td>
+              <td>{{ task.dueDate }}</td>
+              <td>{{ task.priorityLevel }}</td>
 
-            <!-- Completed status TODO: FIGURE THIS OUT-->
-            <td>
-              <div class="form-check">
-                <input
-                  class="form-check-input"
-                  type="checkbox"
-                  (change)="checkChanged()"
-                />
-              </div>
-            </td>
+              <!-- Completed status TODO: FIGURE THIS OUT-->
+              <td>
+                <div class="form-check">
+                  <input
+                    class="form-check-input"
+                    type="checkbox"
+                    (change)="checkChanged()"
+                  />
+                </div>
+              </td>
+            </ng-container>
           </tr>
         </tbody>
       </table>

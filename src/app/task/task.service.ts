@@ -9,7 +9,6 @@ import {
   map,
   Observable,
   of,
-  shareReplay,
   tap,
   throwError,
 } from 'rxjs';
@@ -21,7 +20,7 @@ import { ITask } from './task';
 export class TaskService {
   private tasksUrl = 'api/tasks';
 
-  // All tasks
+  // All tasks  
   tasks$ = this.http.get<ITask[]>(this.tasksUrl).pipe(
     tap((data) => console.log('All', JSON.stringify(data))),
     catchError(this.handleError)

@@ -6,21 +6,23 @@ import {
   combineLatest,
   EMPTY,
   map,
+  Observable,
   Subject,
   Subscription,
 } from 'rxjs';
 import { State } from 'src/app/state/app.state';
 import { ITask } from '../task';
 import { TaskService } from '../task.service';
+import * as TaskActions from '../state/task.actions';
+import { getDisplayTask } from '../state/task.reducer';
 
 @Component({
   templateUrl: './task-list.component.html',
   styleUrls: ['./task-list.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class TaskListComponent {
-  displayTask: boolean = true;
-  sub!: Subscription;
+export class TaskListComponent implements OnInit {
+  displayTask$!: Observable<boolean>;
 
   private _errorMessageSubject = new Subject<string>();
   errorMessage$ = this._errorMessageSubject.asObservable();
@@ -52,7 +54,16 @@ export class TaskListComponent {
   private _statusSubject = new Subject<ITask>();
   statusAction$ = this._statusSubject.asObservable();
 
-  constructor(private taskService: TaskService, private store: Store<State>) {}
+  constructor(private store: Store<State>, private taskService: TaskService) {}
+
+  ngOnInit(): void {
+      // this.tasks$ = this.store.select(getTasks);
+
+      // Just to indicate that this process has started. No background things happening
+      this.store.dispatch(TaskActions.loadTasks()); 
+
+      this.displayTask$ = this.store.select(getDisplayTask)
+  }
 
   // Changing filter
   onFilterSelected(priorityLevel: string): void {
@@ -60,6 +71,6 @@ export class TaskListComponent {
   }
 
   checkChanged() {
-    this.store.dispatch({ type: '[Task] Toggle Task Status' });
+    this.store.dispatch(TaskActions.toggleTaskStatus());
   }
 }

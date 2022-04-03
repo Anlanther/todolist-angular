@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
-import { RouterModule } from '@angular/router';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -11,10 +10,11 @@ import { HttpClientInMemoryWebApiModule } from 'angular-in-memory-web-api';
 import { TaskData } from './task/task-data';
 import { HttpClientModule } from '@angular/common/http';
 import { TaskModule } from './task/task.module';
-import { SignupComponent } from './user/signup/signup.component';
-import { LoginComponent } from './user/login/login.component';
 import { UserModule } from './user/user.module';
 import { StoreModule } from '@ngrx/store';
+import { StoreDevtoolsModule } from '@ngrx/store-devtools';
+import { environment } from 'src/environments/environment';
+import { EffectsModule } from '@ngrx/effects';
 
 @NgModule({
   declarations: [
@@ -29,8 +29,14 @@ import { StoreModule } from '@ngrx/store';
     FormsModule, // For 2 way binding. Will use for filtering
     TaskModule,
     UserModule,
-    AppRoutingModule,
-    StoreModule.forRoot({}, {})
+    AppRoutingModule, // Must always come after any other feature module
+    StoreModule.forRoot({}, {}),
+    StoreDevtoolsModule.instrument({
+      name: 'Priortisation App DevTools',
+      maxAge: 25,
+      logOnly: environment.production
+    }),
+    EffectsModule.forRoot([])
   ],
   providers: [],
   bootstrap: [AppComponent]

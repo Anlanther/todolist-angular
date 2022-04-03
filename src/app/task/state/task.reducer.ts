@@ -1,4 +1,6 @@
-import { createAction, createReducer, on } from "@ngrx/store";
+import * as TaskAction from './task.actions';
+
+import { createFeatureSelector, createReducer, createSelector, on } from "@ngrx/store";
 import { ITask } from "../task";
 
 // This section may be changed after changing it to lazy loading
@@ -6,17 +8,32 @@ import { ITask } from "../task";
 export interface ITaskState {
     displayTask: boolean;
     tasks: ITask[];
+    error: string;
 }
 
 const initialState: ITaskState = {
     displayTask: true,
-    tasks: []
+    tasks: [],
+    error: ''
 }
 
+// Selector functions
+const getTaskFeatureState = createFeatureSelector<ITaskState>('tasks');
+
+// export const getTasks = createSelector(
+//     getTaskFeatureState,
+//     (state) => state.tasks
+// );
+
+export const getDisplayTask = createSelector(
+    getTaskFeatureState,
+    (state) => state.displayTask
+)
+
+// Reducer functions
 export const taskReducer = createReducer<ITaskState>(
     initialState,
-    on(createAction('[Task] Toggle Task Status'), (state): ITaskState => {
-        console.log('original state: ' + JSON.stringify(state));
+    on(TaskAction.toggleTaskStatus, (state): ITaskState => {
         return {
             ...state,
             displayTask: !state.displayTask
