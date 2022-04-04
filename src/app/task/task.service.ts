@@ -5,10 +5,13 @@ import {
 } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import {
+  BehaviorSubject,
   catchError,
+  combineLatest,
   map,
   Observable,
   of,
+  Subject,
   tap,
   throwError,
 } from 'rxjs';
@@ -20,9 +23,23 @@ import { ITask } from './task';
 export class TaskService {
   private tasksUrl = 'api/tasks';
 
-  // All tasks  
+  // All tasks
   tasks$ = this.http.get<ITask[]>(this.tasksUrl).pipe(
     tap((data) => console.log('All', JSON.stringify(data))),
+    catchError(this.handleError)
+  );
+
+  private _statusSubject = new BehaviorSubject<number>(0);
+  // private _statusSubject = new Subject<number>();
+  statusChangeAction$ = this._statusSubject.asObservable();
+
+  taskWithStatus$ = combineLatest([
+    this.tasks$, 
+    this.statusChangeAction$
+  ]).pipe(
+    map(([tasks, removedTask]) => 
+    tasks.filter((task) => (removedTask ? task.id !== removedTask : true))
+    ),
     catchError(this.handleError)
   );
 
@@ -75,7 +92,7 @@ export class TaskService {
     const url = `${this.tasksUrl}/${task.id}`;
 
     return this.http.put<ITask>(url, task, { headers }).pipe(
-      tap(() => console.log('updateProduct' + task.id)),
+      tap(() => console.log('updateTask ID:' + task.id)),
       // Return updated task
       map(() => task),
       catchError(this.handleError)
@@ -104,5 +121,18 @@ export class TaskService {
     }
     console.log(errorMessage);
     return throwError(errorMessage);
+  }
+
+  changeStatus(id: number) {
+    this.getTask(id).subscribe((task) => {
+      const updatedTask: ITask = { ...task, isComplete: !task.isComplete };
+      console.log('Updated status: ', JSON.stringify(updatedTask));
+      this.updateTask(updatedTask).subscribe({
+        next: () => {
+          this._statusSubject.next(id);
+        },
+        error: (err) => this.handleError(err),
+      });
+    });
   }
 }

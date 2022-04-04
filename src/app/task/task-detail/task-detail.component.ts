@@ -139,6 +139,7 @@ export class TaskDetailComponent implements OnInit, AfterViewInit, OnDestroy {
         const p = { ...this.task, ...this.taskEditForm.value };
         this.taskService.updateTask(p).subscribe({
           next: () => this.onSaveComplete(),
+          error: (err) => this.errorMessage = err
         });
       } else {
         this.onSaveComplete();

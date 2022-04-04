@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, OnInit, OnDestroy } from '@angular/core';
+import { Component, ChangeDetectionStrategy, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import {
   BehaviorSubject,
@@ -15,6 +15,7 @@ import { ITask } from '../task';
 import { TaskService } from '../task.service';
 import * as TaskActions from '../state/task.actions';
 import { getDisplayTask } from '../state/task.reducer';
+import { Router } from '@angular/router';
 
 @Component({
   templateUrl: './task-list.component.html',
@@ -22,8 +23,6 @@ import { getDisplayTask } from '../state/task.reducer';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TaskListComponent implements OnInit {
-  displayTask$!: Observable<boolean>;
-
   private _errorMessageSubject = new Subject<string>();
   errorMessage$ = this._errorMessageSubject.asObservable();
 
@@ -34,7 +33,7 @@ export class TaskListComponent implements OnInit {
 
   // Task Filtering
   tasks$ = combineLatest([
-    this.taskService.tasks$,
+    this.taskService.taskWithStatus$,
     this.priorityFilterAction$,
   ]).pipe(
     map(([tasks, selectedPriorityLevel]) =>
@@ -51,18 +50,16 @@ export class TaskListComponent implements OnInit {
     })
   );
 
-  private _statusSubject = new Subject<ITask>();
-  statusAction$ = this._statusSubject.asObservable();
-
-  constructor(private store: Store<State>, private taskService: TaskService) {}
+  constructor(
+    private store: Store<State>,
+    private taskService: TaskService,
+    private router: Router
+  ) {}
 
   ngOnInit(): void {
-      // this.tasks$ = this.store.select(getTasks);
-
-      // Just to indicate that this process has started. No background things happening
-      this.store.dispatch(TaskActions.loadTasks()); 
-
-      this.displayTask$ = this.store.select(getDisplayTask)
+    // this.tasks$ = this.store.select(getTasks);
+    // Just to indicate that this process has started. No background things happening
+    // this.store.dispatch(TaskActions.loadTasks());
   }
 
   // Changing filter
@@ -70,7 +67,7 @@ export class TaskListComponent implements OnInit {
     this._priorityFilterSubject.next(priorityLevel);
   }
 
-  checkChanged() {
-    this.store.dispatch(TaskActions.toggleTaskStatus());
+  checkChanged(taskId: number) {
+    this.taskService.changeStatus(taskId);
   }
 }

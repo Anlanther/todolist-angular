@@ -11,8 +11,6 @@ import { TaskService } from '../task.service';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CompletedListComponent {
-  displayTask: boolean = true;
-  
   private _errorMessageSubject = new Subject<string>();
   errorMessageAction$ = this._errorMessageSubject.asObservable();
 
@@ -30,17 +28,11 @@ export class CompletedListComponent {
           : true
       )
     ),
-    catchError((err) => {
-      this._errorMessageSubject.next(err)
-      return EMPTY;
-    })
-  );
-
-  completedTasks$ = this.tasks$.pipe(
+    tap((tasks) => console.log('Filtered tasks: ', JSON.stringify(tasks))),
     map((tasks) => tasks.filter((task) => task.isComplete)),
     tap((tasks) => console.log('Filtered tasks: ', JSON.stringify(tasks))),
     catchError((err) => {
-      this._errorMessageSubject.next(err);
+      this._errorMessageSubject.next(err)
       return EMPTY;
     })
   );
@@ -51,7 +43,7 @@ export class CompletedListComponent {
     this._priorityFilterSubject.next(priorityLevel);
   }
 
-  checkChange() {
-    this.store.dispatch({ type: '[Task] Toggle Task Status' });
+  checkChange(taskId: number) {
+    this.taskService.changeStatus(taskId);
   }
 }

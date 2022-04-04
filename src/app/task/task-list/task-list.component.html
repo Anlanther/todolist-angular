@@ -36,7 +36,6 @@
         </thead>
         <tbody>
           <tr *ngFor="let task of tasks">
-            <ng-container *ngIf="displayTask$ | async">
               <td>
                 <a [routerLink]="['/tasks', task.id]">
                   {{ task.taskName }}
@@ -51,11 +50,11 @@
                   <input
                     class="form-check-input"
                     type="checkbox"
-                    (change)="checkChanged()"
+                    [checked]="task.isComplete"
+                    (change)="checkChanged(task.id!)"
                   />
                 </div>
               </td>
-            </ng-container>
           </tr>
         </tbody>
       </table>
