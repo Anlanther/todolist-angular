@@ -24,24 +24,42 @@ export class TaskService {
   private tasksUrl = 'api/tasks';
 
   // All tasks
-  tasks$ = this.http.get<ITask[]>(this.tasksUrl).pipe(
-    tap((data) => console.log('All', JSON.stringify(data))),
+  getTasks(): Observable<ITask[]> {
+    return this.http.get<ITask[]>(this.tasksUrl).pipe(
+      tap((data) => console.log('All', JSON.stringify(data))),
     catchError(this.handleError)
-  );
+    );
+  }
+  // tasks$ = this.http.get<ITask[]>(this.tasksUrl).pipe(
+  //   tap((data) => console.log('All', JSON.stringify(data))),
+  //   catchError(this.handleError)
+  // );
 
-  private _statusSubject = new BehaviorSubject<number>(0);
-  // private _statusSubject = new Subject<number>();
-  statusChangeAction$ = this._statusSubject.asObservable();
+  // private _statusCompleteSubject = new BehaviorSubject<number>(0);
+  // statusCompleteAction$ = this._statusCompleteSubject.asObservable();
 
-  taskWithStatus$ = combineLatest([
-    this.tasks$, 
-    this.statusChangeAction$
-  ]).pipe(
-    map(([tasks, removedTask]) => 
-    tasks.filter((task) => (removedTask ? task.id !== removedTask : true))
-    ),
-    catchError(this.handleError)
-  );
+  // taskStatusComplete$ = combineLatest([
+  //   this.tasks$, 
+  //   this.statusCompleteAction$
+  // ]).pipe(
+  //   map(([tasks, removedTask]) => 
+  //   tasks.filter((task) => (removedTask ? task.id !== removedTask : true))
+  //   ),
+  //   catchError(this.handleError)
+  // );
+
+  // private _statusIncompleteSubject = new BehaviorSubject<number>(0);
+  // statusIncompleteAction$ = this._statusIncompleteSubject.asObservable();
+
+  // taskStatusIncomplete$ = combineLatest([
+  //   this.tasks$, 
+  //   this.statusIncompleteAction$
+  // ]).pipe(
+  //   map(([tasks, removedTask]) => 
+  //   tasks.filter((task) => (removedTask ? task.id !== removedTask : true))
+  //   ),
+  //   catchError(this.handleError)
+  // );
 
   constructor(private http: HttpClient) {}
 
@@ -123,13 +141,39 @@ export class TaskService {
     return throwError(errorMessage);
   }
 
+  // changeComplete(id: number) {
+  //   this.getTask(id).subscribe((task) => {
+  //     const updatedTask: ITask = { ...task, isComplete: !task.isComplete };
+  //     console.log('Updated status: ', JSON.stringify(updatedTask));
+  //     this.updateTask(updatedTask).subscribe({
+  //       next: () => {
+  //         this._statusCompleteSubject.next(id);
+  //       },
+  //       error: (err) => this.handleError(err),
+  //     });
+  //   });
+  // }
+
+  // changeIncomplete(id: number) {
+  //   this.getTask(id).subscribe((task) => {
+  //     const updatedTask: ITask = { ...task, isComplete: !task.isComplete };
+  //     console.log('Updated status: ', JSON.stringify(updatedTask));
+  //     this.updateTask(updatedTask).subscribe({
+  //       next: () => {
+  //         this._statusIncompleteSubject.next(id);
+  //       },
+  //       error: (err) => this.handleError(err),
+  //     });
+  //   });
+  // }
+
   changeStatus(id: number) {
     this.getTask(id).subscribe((task) => {
       const updatedTask: ITask = { ...task, isComplete: !task.isComplete };
       console.log('Updated status: ', JSON.stringify(updatedTask));
       this.updateTask(updatedTask).subscribe({
         next: () => {
-          this._statusSubject.next(id);
+          // this._statusIncompleteSubject.next(id);
         },
         error: (err) => this.handleError(err),
       });

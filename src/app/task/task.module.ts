@@ -6,10 +6,8 @@ import { TaskDetailComponent } from './task-detail/task-detail.component';
 import { TaskListComponent } from './task-list/task-list.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { RouterModule, Routes } from '@angular/router';
-import { TaskDetailGuard } from './task-detail/task-detail.guard';
 import { StoreModule } from '@ngrx/store';
 import { taskReducer } from './state/task.reducer';
-import { TaskResolver } from './task-resolver.service';
 import { EffectsModule } from '@ngrx/effects';
 import { TaskEffects } from './state/task.effects';
 

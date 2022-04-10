@@ -6,13 +6,11 @@ import { ITask } from "../task";
 // This section may be changed after changing it to lazy loading
 // Routing course needs to be gone through first
 export interface ITaskState {
-    displayTask: boolean;
     tasks: ITask[];
     error: string;
 }
 
 const initialState: ITaskState = {
-    displayTask: true,
     tasks: [],
     error: ''
 }
@@ -20,23 +18,33 @@ const initialState: ITaskState = {
 // Selector functions
 const getTaskFeatureState = createFeatureSelector<ITaskState>('tasks');
 
-// export const getTasks = createSelector(
-//     getTaskFeatureState,
-//     (state) => state.tasks
-// );
-
-export const getDisplayTask = createSelector(
+export const getTasks = createSelector(
     getTaskFeatureState,
-    (state) => state.displayTask
-)
+    (state) => state.tasks
+);
 
 // Reducer functions
 export const taskReducer = createReducer<ITaskState>(
     initialState,
-    on(TaskAction.toggleTaskStatus, (state): ITaskState => {
+    on(TaskAction.loadIncompleteTasksSuccess, (state, action): ITaskState => {
         return {
             ...state,
-            displayTask: !state.displayTask
-        };
-    })
+            tasks: action.tasks,
+            error: ''
+        }
+    }),
+    on(TaskAction.loadCompleteTasksSuccess, (state, action): ITaskState => {
+        return {
+            ...state,
+            tasks: action.tasks,
+            error: ''
+        }
+    }),
+    on(TaskAction.updateTaskSuccess, (state, action): ITaskState => {
+        return {
+            ...state,
+            tasks: state.tasks.filter((task) => task.id !== action.task.id),
+            error: ''
+        }
+    }),
 );
