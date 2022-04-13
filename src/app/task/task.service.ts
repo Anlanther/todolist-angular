@@ -5,13 +5,10 @@ import {
 } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import {
-  BehaviorSubject,
   catchError,
-  combineLatest,
   map,
   Observable,
   of,
-  Subject,
   tap,
   throwError,
 } from 'rxjs';
