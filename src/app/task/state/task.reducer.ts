@@ -7,11 +7,15 @@ import { ITask } from "../task";
 // Routing course needs to be gone through first
 export interface ITaskState {
     tasks: ITask[];
+    filteredTasks: ITask[];
+    filter: number;
     error: string;
 }
 
 const initialState: ITaskState = {
     tasks: [],
+    filteredTasks: [],
+    filter: 0,
     error: ''
 }
 
@@ -23,13 +27,20 @@ export const getTasks = createSelector(
     (state) => state.tasks
 );
 
+export const getPriorityFilter = createSelector(
+    getTaskFeatureState,
+    (state) => state.filter
+);
+
 // Reducer functions
+// TODO: Create functions for loading failures
 export const taskReducer = createReducer<ITaskState>(
     initialState,
     on(TaskAction.loadIncompleteTasksSuccess, (state, action): ITaskState => {
         return {
             ...state,
             tasks: action.tasks,
+            filter: 0,
             error: ''
         }
     }),
@@ -37,6 +48,7 @@ export const taskReducer = createReducer<ITaskState>(
         return {
             ...state,
             tasks: action.tasks,
+            filter: 0,
             error: ''
         }
     }),
@@ -47,4 +59,16 @@ export const taskReducer = createReducer<ITaskState>(
             error: ''
         }
     }),
+    on(TaskAction.togglePriorityFilter, (state, action): ITaskState => {
+        return {
+            ...state,
+            filter: Number(action.priorityFilter)
+        }
+    }),
+    on(TaskAction.togglePriorityFilterSuccess, (state, action): ITaskState => {
+        return {
+            ...state,
+            tasks: action.tasks.filter((task) => task.priorityLevel == state.filter)
+        }
+    })
 );

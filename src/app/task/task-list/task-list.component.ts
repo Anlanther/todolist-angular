@@ -14,47 +14,29 @@ import { State } from 'src/app/state/app.state';
 import { ITask } from '../task';
 import { TaskService } from '../task.service';
 import * as TaskActions from '../state/task.actions';
-import { getTasks } from '../state/task.reducer';
+import { getPriorityFilter, getTasks } from '../state/task.reducer';
 import { Router } from '@angular/router';
 
 @Component({
   templateUrl: './task-list.component.html',
   styleUrls: ['./task-list.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+  // changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TaskListComponent implements OnInit {
   tasks$!: Observable<ITask[]>;
+  filteredTasks$!: Observable<ITask[]>;
 
   private _errorMessageSubject = new Subject<string>();
   errorMessage$ = this._errorMessageSubject.asObservable();
 
   // Action stream
   // Type of task here is inferred, as tasks$ in the service has already been given a type
+  // TODO: Change Error methods to use NgRx
   private _priorityFilterSubject = new BehaviorSubject<string>('');
   priorityFilterAction$ = this._priorityFilterSubject.asObservable();
 
-  // Task Filtering
-  // tasks$ = combineLatest([
-  //   this.taskService.tasks$,
-  //   this.priorityFilterAction$,
-  // ]).pipe(
-  //   map(([tasks, selectedPriorityLevel]) =>
-  //     tasks.filter((task) =>
-  //       selectedPriorityLevel
-  //         ? task.priorityLevel === Number(selectedPriorityLevel)
-  //         : true
-  //     )
-  //   ),
-  //   map((tasks) => tasks.filter((task) => !task.isComplete)),
-  //   catchError((err) => {
-  //     this._errorMessageSubject.next(err);
-  //     return EMPTY;
-  //   })
-  // );
-
   constructor(
     private store: Store<State>,
-    private taskService: TaskService,
   ) {}
 
   ngOnInit(): void {
@@ -63,13 +45,14 @@ export class TaskListComponent implements OnInit {
   }
 
   // Changing filter
-  onFilterSelected(priorityLevel: string): void {
-    this._priorityFilterSubject.next(priorityLevel);
+  onFilterSelected(priorityFilter: string): void {
+    // this._priorityFilterSubject.next(priorityLevel);
+    this.store.dispatch(TaskActions.togglePriorityFilter({ priorityFilter }));
   }
 
   checkChanged(currentTask: ITask) {
     const task: ITask = { ...currentTask, isComplete: !currentTask.isComplete };
     console.log('Updated status: ', JSON.stringify(task));
-    this.store.dispatch(TaskActions.updateTask({ task }))
+    this.store.dispatch(TaskActions.updateTask({ task }));
   }
 }

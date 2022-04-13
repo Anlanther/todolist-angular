@@ -1,8 +1,14 @@
 import { createAction, props } from "@ngrx/store";
 import { ITask } from "../task";
 
-export const toggleTaskStatus = createAction(
-    '[Task] Toggle Task Status'
+export const togglePriorityFilter = createAction(
+    '[Task] Toggle Task Filter',
+    props<{ priorityFilter: string }>()
+);
+
+export const togglePriorityFilterSuccess = createAction(
+    '[Task] Toggle Task Filter Success',
+    props<{ tasks: ITask[] }>()
 );
 
 export const loadTasks = createAction(

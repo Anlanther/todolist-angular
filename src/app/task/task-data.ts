@@ -36,6 +36,14 @@ export class TaskData implements InMemoryDbService {
                 priorityLevel: 1,
                 isComplete: true
             },
+            {
+                id: 5,
+                taskName: 'Write more notes',
+                description: 'Practicing Angular.',
+                dueDate: "2022-02-10",
+                priorityLevel: 1,
+                isComplete: false
+            },
         ];
         return { tasks };
     }

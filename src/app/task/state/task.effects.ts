@@ -61,4 +61,17 @@ export class TaskEffects {
     );
   });
 
+  loadIncompleteFilteredTasks$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(TaskActions.togglePriorityFilter),
+      mergeMap(() =>
+        this.taskService.getTasks().pipe(
+          map((tasks) => tasks.filter((task) => !task.isComplete)),
+          map((tasks) => TaskActions.togglePriorityFilterSuccess({ tasks })),
+          // TODO: Create custom error action for this action
+          catchError((error) => of(TaskActions.loadIncompleteTaskFailure({ error })))
+        )
+      )
+    );
+  });
 }
