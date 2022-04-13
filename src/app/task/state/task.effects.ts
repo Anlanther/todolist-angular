@@ -63,11 +63,25 @@ export class TaskEffects {
 
   loadIncompleteFilteredTasks$ = createEffect(() => {
     return this.actions$.pipe(
-      ofType(TaskActions.togglePriorityFilter),
+      ofType(TaskActions.toggleIncomepletePriority),
       mergeMap(() =>
         this.taskService.getTasks().pipe(
           map((tasks) => tasks.filter((task) => !task.isComplete)),
-          map((tasks) => TaskActions.togglePriorityFilterSuccess({ tasks })),
+          map((tasks) => TaskActions.toggleIncompletePrioritySuccess({ tasks })),
+          // TODO: Create custom error action for this action
+          catchError((error) => of(TaskActions.loadIncompleteTaskFailure({ error })))
+        )
+      )
+    );
+  });
+
+  loadCompleteFilteredTasks$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(TaskActions.toggleComepletePriority),
+      mergeMap(() =>
+        this.taskService.getTasks().pipe(
+          map((tasks) => tasks.filter((task) => task.isComplete)),
+          map((tasks) => TaskActions.toggleCompletePrioritySuccess({ tasks })),
           // TODO: Create custom error action for this action
           catchError((error) => of(TaskActions.loadIncompleteTaskFailure({ error })))
         )

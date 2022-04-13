@@ -59,16 +59,28 @@ export const taskReducer = createReducer<ITaskState>(
             error: ''
         }
     }),
-    on(TaskAction.togglePriorityFilter, (state, action): ITaskState => {
+    on(TaskAction.toggleIncomepletePriority, (state, action): ITaskState => {
         return {
             ...state,
             filter: Number(action.priorityFilter)
         }
     }),
-    on(TaskAction.togglePriorityFilterSuccess, (state, action): ITaskState => {
+    on(TaskAction.toggleIncompletePrioritySuccess, (state, action): ITaskState => {
         return {
             ...state,
             tasks: action.tasks.filter((task) => task.priorityLevel == state.filter)
         }
-    })
+    }),
+    on(TaskAction.toggleComepletePriority, (state, action): ITaskState => {
+        return {
+            ...state,
+            filter: Number(action.priorityFilter)
+        }
+    }),
+    on(TaskAction.toggleCompletePrioritySuccess, (state, action): ITaskState => {
+        return {
+            ...state,
+            tasks: action.tasks.filter((task) => task.priorityLevel == state.filter)
+        }
+    }),
 );
