@@ -1,84 +1,50 @@
-import {
-  Component,
-  Input,
-  Output,
-  EventEmitter,
-  ChangeDetectionStrategy,
-} from '@angular/core';
+import { Component, ChangeDetectionStrategy, OnInit } from '@angular/core';
+import { Store } from '@ngrx/store';
 import {
   BehaviorSubject,
-  catchError,
-  combineLatest,
-  EMPTY,
-  filter,
-  map,
   Observable,
-  of,
   Subject,
 } from 'rxjs';
+import { State } from 'src/app/state/app.state';
 import { ITask } from '../task';
-import { TaskService } from '../task.service';
+import * as TaskActions from '../state/task.actions';
+import { getTasks } from '../state/task.reducer';
 
 @Component({
   templateUrl: './task-list.component.html',
   styleUrls: ['./task-list.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class TaskListComponent {
-  @Input() completedStatus: boolean = false; // need to figure out how to implement a tick
-  @Output() statusClicked: EventEmitter<string> = new EventEmitter<string>();
+export class TaskListComponent implements OnInit {
+  tasks$!: Observable<ITask[]>;
 
-  errorMessage = '';
+  private _errorMessageSubject = new Subject<string>();
+  errorMessage$ = this._errorMessageSubject.asObservable();
 
-  // private _listFilter = 0;
-  // get listFilter(): number {
-  //   return this._listFilter;
-  // }
-
-  // filteredTasks: ITask[] = [];
-  // filteredTasks$ = this.taskService.tasks$.pipe(
-  //   map((tasks) =>
-  //     tasks.filter((task) =>
-  //       this._listFilter ? task.priorityLevel === this._listFilter : true
-  //     )
-  //   )
-  // );
-
+  // Action stream
   // Type of task here is inferred, as tasks$ in the service has already been given a type
+  // TODO: Change Error methods to use NgRx
   private _priorityFilterSubject = new BehaviorSubject<string>('');
   priorityFilterAction$ = this._priorityFilterSubject.asObservable();
 
-  tasks$ = combineLatest([
-    this.taskService.tasks$,
-    this.priorityFilterAction$,
-  ]).pipe(
-    map(([tasks, selectedPriorityLevel]) =>
-      tasks.filter((task) =>
-        selectedPriorityLevel
-          ? task.priorityLevel === Number(selectedPriorityLevel)
-          : true
-      )
-    ),
-    catchError((err) => {
-      this.errorMessage = err;
-      return EMPTY;
-    })
-  );
+  constructor(
+    private store: Store<State>,
+  ) {}
 
-  constructor(private taskService: TaskService) {}
+  ngOnInit(): void {
+    this.tasks$ = this.store.select(getTasks);
+    this.store.dispatch(TaskActions.loadIncompleteTasks());
+  }
 
-  // onClick(): void {
-  //   this.statusClicked.emit  // need to figure out how to implement change of tick method
-  // }
+  // Changing filter
+  onFilterSelected(priorityFilter: string): void {
+    // this._priorityFilterSubject.next(priorityLevel);
+    this.store.dispatch(TaskActions.toggleIncomepletePriority({ priorityFilter }));
+  }
 
-  // performFilter(filterBy: string): ITask[] {
-  //   return this.tasks$.filter(
-  //     (task: ITask) => task.priorityLevel.toString() == filterBy
-  //   );
-  // }
-
-  onSelected(priorityLevel: string): void {
-    // + is added here to cast string to a number
-    this._priorityFilterSubject.next(priorityLevel);
+  checkChanged(currentTask: ITask) {
+    const task: ITask = { ...currentTask, isComplete: !currentTask.isComplete };
+    console.log('Updated status: ', JSON.stringify(task));
+    this.store.dispatch(TaskActions.updateTask({ task }));
   }
 }

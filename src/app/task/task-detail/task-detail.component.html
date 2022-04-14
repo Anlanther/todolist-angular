@@ -43,22 +43,23 @@
         <!-- Priority Level -->
         <div class="row">
           <div class="col-4">
-            <select
-              class="form-select"
-              aria-label="Default select example"
-              formControlName="priorityLevel"
-              [ngClass]="{ 'is-invalid': inputErrorMessage.priority }"
-            >
-              <span class="invalid-feedback">{{
-                inputErrorMessage.priority
-              }}</span>
-              <option value="" disabled selected hidden>Priority Level</option>
-              <option value="1">1</option>
-              <option value="2">2</option>
-              <option value="3">3</option>
-              <option value="4">4</option>
-              <option value="5">5</option>
-            </select>
+            <div class="input-group mb-3">
+              <span class="input-group-text" id="inputGroup-sizing-default"
+                >Add task:</span
+              >
+              <input
+                type="number"
+                class="form-control"
+                aria-label="Sizing example input"
+                aria-describedby="inputGroup-sizing-default"
+                placeholder="Add priority level here"
+                formControlName="priorityLevel"
+                min="1"
+                max="5"
+                [ngClass]="{ 'is-invalid': inputErrorMessage.taskName }"
+              />
+              <span class="invalid-feedback">{{ inputErrorMessage.priority }}</span>
+            </div>
           </div>
 
           <!-- Status -->

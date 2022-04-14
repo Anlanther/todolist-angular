@@ -12,6 +12,7 @@ import {
   Validators,
   AbstractControl,
   FormControlName,
+  FormControl,
 } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { debounceTime, fromEvent, merge, Observable, Subscription } from 'rxjs';
@@ -19,19 +20,14 @@ import { ITask } from '../task';
 import { TaskService } from '../task.service';
 import { GenericValidator } from './generic-validator';
 
-// const setDates = (today: Date, isMin: boolean): string => {
-//   const todayDate = `${today.getFullYear().toString()}-${today
-//     .getMonth()
-//     .toString()}-${today.getDay().toString()}`;
-//   const tenYearDate = `${(today.getFullYear() + 10).toString()}-${today
-//     .getMonth()
-//     .toString()}-${today.getDay().toString()}`;
-//   if (isMin) {
-//     return todayDate;
-//   } else {
-//     return tenYearDate;
-//   }
-// };
+function lessThanToday(c: AbstractControl): { [key: string]: boolean } | null {
+  let today: Date = new Date();
+
+  if (new Date(c.value) < today) {
+    return { "lessToday": true };
+  }
+  return null;
+}
 
 @Component({
   selector: 'app-add-task',
@@ -50,11 +46,6 @@ export class AddTaskComponent implements OnInit, AfterViewInit, OnDestroy {
     priority?: string;
   } = {};
   task!: ITask;
-
-  // Still need to figure this part out to see if it works
-  // todayDate: Date = new Date();
-  // nowDate: string = setDates(this.todayDate, true);
-  // maxDate: string = setDates(this.todayDate, false);
 
   private _sub!: Subscription;
 
@@ -75,6 +66,7 @@ export class AddTaskComponent implements OnInit, AfterViewInit, OnDestroy {
       },
       dueDate: {
         required: 'Due date is required.',
+        lessToday: 'Date should be ahead of today.'
       },
       priority: {
         required: 'Priority level is required.',
@@ -85,8 +77,8 @@ export class AddTaskComponent implements OnInit, AfterViewInit, OnDestroy {
 
     this.taskInputForm = this.fb.group({
       taskName: ['', [Validators.required, Validators.minLength(3)]],
-      dueDate: ['', [Validators.required]],
-      priorityLevel: ['', [Validators.required]],
+      dueDate: ['', [Validators.required, lessThanToday]],
+      priorityLevel: [null],
     });
   }
 
@@ -102,7 +94,7 @@ export class AddTaskComponent implements OnInit, AfterViewInit, OnDestroy {
     );
 
     merge(this.taskInputForm.valueChanges, ...controlBlurs)
-      .pipe(debounceTime(800))
+      .pipe(debounceTime(500))
       .subscribe((value) => {
         this.inputErrorMessage = this._genericValidator.processMessages(
           this.taskInputForm
@@ -134,34 +126,27 @@ export class AddTaskComponent implements OnInit, AfterViewInit, OnDestroy {
     });
   }
 
-  saveTask(): void {
+  addTask(): void {
     if (this.taskInputForm.valid) {
-      if (this.taskInputForm.dirty) {
-        // p combines values of the values of the two
-        // because of the initialisation, taskInputForm and task should have the same values
-        // only difference is if the form did not include variables from task
-        const p = { ...this.task, ...this.taskInputForm.value };
-
-        console.log('here you are');
-        if (p.id === 0) {
-          console.log('has id of 0');
-          this.taskService.createTask(p).subscribe({
-            next: (task) => {
-              console.log(task);
-              return this.onSaveComplete();
-            },
-            error: (err) => (this.errorMessage = err),
-          });
-        } else {
-        }
-      }
+      // p combines values of the values of the two
+      // because of the initialisation, taskInputForm and task should have the same values
+      // only difference is if the form did not include variables from task
+      const p = { ...this.task, ...this.taskInputForm.value };
+      this.taskService.createTask(p).subscribe({
+        next: (task) => {
+          console.log(task);
+          return this.onSaveComplete();
+        },
+        error: (err) => (this.errorMessage = err),
+      });
     }
   }
 
   onSaveComplete(): void {
     this.taskInputForm.reset();
-    this.router.navigateByUrl('/', {skipLocationChange: true}).then(()=>
-    this.router.navigate(['/tasks']));
+    this.router
+      .navigateByUrl('/', { skipLocationChange: true })
+      .then(() => this.router.navigate(['/tasks']));
   }
 
   ngOnDestroy(): void {
