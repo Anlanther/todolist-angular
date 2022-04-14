@@ -1,0 +1,6 @@
+<app-completed-list
+  [tasks]="tasks$ | async"
+  [errorMessage]="errorMessage$ | async"
+  (filterChanged)="onFilterSelected($any($event))"
+  (statusChanged)="checkChanged($any($event))"
+></app-completed-list>

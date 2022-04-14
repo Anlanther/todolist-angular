@@ -10,12 +10,14 @@ import { StoreModule } from '@ngrx/store';
 import { taskReducer } from './state/task.reducer';
 import { EffectsModule } from '@ngrx/effects';
 import { TaskEffects } from './state/task.effects';
+import { TaskShellComponent } from './shells/task-shell/task-shell.component';
+import { CompletedShellComponent } from './shells/completed-shell/completed-shell.component';
 
 // ng g m task(folder)/task(name of this file) --flat (do not create new file) -m app (import in app module)
 
 const taskRoutes: Routes = [
-  { path: 'tasks', component: TaskListComponent },
-  { path: 'completed', component: CompletedListComponent },
+  { path: 'tasks', component: TaskShellComponent },
+  { path: 'completed', component: CompletedShellComponent },
   
   
   // WIP - Creating resolver for lazy loading 
@@ -33,6 +35,8 @@ const taskRoutes: Routes = [
     CompletedListComponent,
     TaskDetailComponent,
     TaskListComponent,
+    TaskShellComponent,
+    CompletedShellComponent
   ],
   imports: [
     CommonModule, // this exports forms and router module for other modules

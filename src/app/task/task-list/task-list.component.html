@@ -25,7 +25,7 @@
       </div>
 
       <!-- Task Table -->
-      <table class="table" *ngIf="tasks$ | async as tasks">
+      <table class="table" *ngIf="tasks">
         <thead>
           <tr>
             <th scope="col">Task</th>
@@ -61,7 +61,7 @@
     </div>
   </div>
 
-  <div class="alert alert-danger" *ngIf="errorMessage$ | async as errorMessage">
+  <div class="alert alert-danger" *ngIf="errorMessage">
     {{ errorMessage }}
   </div>
 </div>

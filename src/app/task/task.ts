@@ -11,5 +11,5 @@ export interface ITask {
 // Good for error handling when using resolver
 export interface ITaskResolved {
     task: ITask | null;
-    error?: any;
+    error: any;
 }

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { TaskService } from '../task.service';
 
-import * as TaskActions from './task.actions';
+import * as TaskActions from './actions/task.actions';
 
 // Make sure to import Actions from the correct library
 import { Actions, createEffect, ofType } from '@ngrx/effects';

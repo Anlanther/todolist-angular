@@ -1,6 +1,6 @@
-import * as TaskAction from './task.actions';
+import * as TaskAction from './actions/task.actions';
 
-import { createFeatureSelector, createReducer, createSelector, on } from "@ngrx/store";
+import { createReducer, on } from "@ngrx/store";
 import { ITask } from "../task";
 
 // This section may be changed after changing it to lazy loading
@@ -18,19 +18,6 @@ const initialState: ITaskState = {
     filter: 0,
     error: ''
 }
-
-// Selector functions
-const getTaskFeatureState = createFeatureSelector<ITaskState>('tasks');
-
-export const getTasks = createSelector(
-    getTaskFeatureState,
-    (state) => state.tasks
-);
-
-export const getPriorityFilter = createSelector(
-    getTaskFeatureState,
-    (state) => state.filter
-);
 
 // Reducer functions
 // TODO: Create functions for loading failures

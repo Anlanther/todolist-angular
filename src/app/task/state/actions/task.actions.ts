@@ -1,5 +1,5 @@
 import { createAction, props } from "@ngrx/store";
-import { ITask } from "../task";
+import { ITask } from "../../task";
 
 export const toggleIncomepletePriority = createAction(
     '[Task] Toggle Task Incomplete Filter',
