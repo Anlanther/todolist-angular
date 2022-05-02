@@ -8,7 +8,7 @@ export interface ITask {
     isComplete: boolean;
 }
 
-// Good for error handling when using resolver
+// Good for error handling when using resolver. Not currently implemented
 export interface ITaskResolved {
     task: ITask | null;
     error?: any;

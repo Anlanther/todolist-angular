@@ -4,14 +4,7 @@ import {
   HttpHeaders,
 } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import {
-  catchError,
-  map,
-  Observable,
-  of,
-  tap,
-  throwError,
-} from 'rxjs';
+import { catchError, map, Observable, of, tap, throwError } from 'rxjs';
 import { ITask } from './task';
 
 @Injectable({
@@ -24,7 +17,7 @@ export class TaskService {
   getTasks(): Observable<ITask[]> {
     return this.http.get<ITask[]>(this.tasksUrl).pipe(
       tap((data) => console.log('All', JSON.stringify(data))),
-    catchError(this.handleError)
+      catchError(this.handleError)
     );
   }
 
