@@ -1,18 +1,28 @@
 <div class="card w-75">
-    <div class="card-body">
-      <h2>Login</h2>
-      
-      <form>
-        <div class="mb-3">
-          <label for="exampleInputEmail1" class="form-label">Username</label>
-          <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
-        </div>
-        <div class="mb-3">
-          <label for="exampleInputPassword1" class="form-label">Password</label>
-          <input type="password" class="form-control" id="exampleInputPassword1">
-        </div>
-        <button type="submit" class="btn btn-primary">Login</button>
-      </form>
+  <div class="card-body">
+    <h2>Login</h2>
 
-    </div>
+    <form novalidate (ngSubmit)="login()" [formGroup]="userLoginForm">
+      <div class="mb-3">
+        <label for="exampleInputEmail1" class="form-label">Username</label>
+        <input
+          type="text"
+          class="form-control"
+          id="exampleInputEmail1"
+          aria-describedby="emailHelp"
+          formControlName="username"
+        />
+      </div>
+      <div class="mb-3">
+        <label for="exampleInputPassword1" class="form-label">Password</label>
+        <input
+          type="password"
+          class="form-control"
+          id="exampleInputPassword1"
+          formControlName="password"
+        />
+      </div>
+      <button type="submit" class="btn btn-primary">Login</button>
+    </form>
   </div>
+</div>
