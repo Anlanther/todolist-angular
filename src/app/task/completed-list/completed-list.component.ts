@@ -5,9 +5,9 @@ import {
   Subject,
 } from 'rxjs';
 import { State } from 'src/app/state/app.state';
-import { getTasks } from '../state/task.reducer';
 import { ITask } from '../task';
 import * as TaskActions from '../state/task.actions';
+import { getTasks } from '../state/task.reducer';
 
 @Component({
   selector: 'app-completed-list',

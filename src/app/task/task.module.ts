@@ -16,6 +16,7 @@ import { TaskEffects } from './state/task.effects';
 const taskRoutes: Routes = [
   { path: 'tasks', component: TaskListComponent },
   { path: 'completed', component: CompletedListComponent },
+  { path: 'tasks/:id', component: TaskDetailComponent}
   
   
   // WIP - Creating resolver for lazy loading 
